@@ -1,0 +1,10 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+  max-http-header-size: 8KB
+  port: 9091
+
+logging:
+  level:
+    root: INFO

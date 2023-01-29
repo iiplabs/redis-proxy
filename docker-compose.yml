@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  rp-core:
+    build:
+      context: ./rp-core/
+    image: rp-core:latest
+    container_name: rp-core
+    restart: unless-stopped
+    ports:
+      - '${RP_CORE_SERVER_PORT}:${RP_CORE_SERVER_PORT}'
+    environment: 
+      RP_CORE_SERVER_PORT: ${RP_CORE_SERVER_PORT}
+      RP_CORE_REDIS_HOSTS: ${RP_CORE_REDIS_HOSTS}
+    depends_on:
+      - redis
+
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_AOF_ENABLED=no
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      - REDIS_IO_THREADS=4
+      - REDIS_IO_THREADS_DO_READS=true
+    command: /opt/bitnami/scripts/redis/run.sh --maxmemory 100mb

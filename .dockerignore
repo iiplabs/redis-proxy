@@ -1,0 +1,56 @@
+node_modules
+npm-debug*
+.nuxt
+
+.gitignore
+.gradle/
+.idea/
+.project
+target
+build/
+exec.sh
+exec.ps1
+README.md
+LICENSE
+lombok.config
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+*.log
+
+*.tar.gz
+*.zip
+
+/src
+pom.xml
+/.git
+/.settings
+.springBeans
+.classpath
+.factorypath
+.vscode
+
+*.iml

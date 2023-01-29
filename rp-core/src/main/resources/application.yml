@@ -1,0 +1,12 @@
+debug: false
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+  max-http-header-size: 8KB
+  port: ${RP_CORE_SERVER_PORT}
+
+logging:
+  level:
+    root: INFO
