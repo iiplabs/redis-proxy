@@ -12,6 +12,8 @@ services:
     environment: 
       RP_CORE_SERVER_PORT: ${RP_CORE_SERVER_PORT}
       RP_CORE_REDIS_HOSTS: ${RP_CORE_REDIS_HOSTS}
+      RP_CORE_REDIS_USERNAME: ${RP_CORE_REDIS_USERNAME}
+      RP_CORE_REDIS_PASSWORD: ${RP_CORE_REDIS_PASSWORD}
     depends_on:
       - redis
 

@@ -1,6 +1,6 @@
 package com.iiplabs.rp.rest
 
-import com.iiplabs.rp.model.SendMessageValidationResponseDto
+import com.iiplabs.rp.model.PostObjectValidationResponseDto
 import com.iiplabs.rp.utils.StringUtil
 
 import mu.KotlinLogging
@@ -19,7 +19,7 @@ class CustomValidationExceptionHandler {
     @ExceptionHandler(WebExchangeBindException::class)
     fun handleValidationExceptions(
         ex: WebExchangeBindException
-    ): ResponseEntity<SendMessageValidationResponseDto> {
+    ): ResponseEntity<PostObjectValidationResponseDto> {
         logger.error { ex }
 
         val errors: Map<String, String?> =
@@ -27,9 +27,9 @@ class CustomValidationExceptionHandler {
                 { StringUtil.getLastField((it as FieldError).field) },
                 { it.defaultMessage })
 
-        val sendMessageValidationResponseDto = SendMessageValidationResponseDto(errors)
-        logger.error { "Encountered data validation problem: ${sendMessageValidationResponseDto}" }
-        return ResponseEntity(sendMessageValidationResponseDto, HttpStatus.BAD_REQUEST)
+        val postObjectValidationResponseDto = PostObjectValidationResponseDto(errors)
+        logger.error { "Encountered data validation problem: ${postObjectValidationResponseDto}" }
+        return ResponseEntity(postObjectValidationResponseDto, HttpStatus.BAD_REQUEST)
     }
 
 }

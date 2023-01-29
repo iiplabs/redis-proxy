@@ -10,3 +10,17 @@ server:
 logging:
   level:
     root: INFO
+
+redis:
+  # unique key prefix
+  appPrefix: ${profileName}
+  hosts: [ ${RP_CORE_REDIS_HOSTS} ]
+  username: ${RP_CORE_REDIS_USERNAME}
+  password: ${RP_CORE_REDIS_PASSWORD}
+  minIdle: 1
+  maxIdle: 10
+  maxTotal: 10
+  timeout: 2000
+  ioThreadPoolSize: 2
+  computationThreadPoolSize: 2
+  maxPendingTasks: 100

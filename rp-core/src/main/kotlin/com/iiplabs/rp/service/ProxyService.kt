@@ -1,32 +1,57 @@
 package com.iiplabs.rp.service
 
+import com.iiplabs.rp.legacy.CallSession
+import com.iiplabs.rp.model.SaveCallSessionRequest
+import com.iiplabs.rp.repositories.ICallSessionsRepository
 import mu.KotlinLogging
-import kotlinx.coroutines.delay
 import org.springframework.stereotype.Service
 
-import com.iiplabs.rp.model.SendMessageRequestDto
-import kotlin.time.Duration.Companion.seconds
+import org.springframework.beans.factory.annotation.Qualifier
+import ru.osp.collectors.csp.model.redis.CallSessionRedis
+import java.util.*
 
 interface ProxyService {
-    suspend fun send(sendMessageRequestDto: SendMessageRequestDto)
+    fun findCallSession(key: String): List<CallSession>
+    fun saveCallSession(saveCallSessionRequest: SaveCallSessionRequest)
+    fun deleteCallSession(key: String)
 }
 
 private val logger = KotlinLogging.logger {}
 
 @Service("proxyService")
-class ProxyServiceImpl : ProxyService {
+class ProxyServiceImpl(
+    @Qualifier("callSessionsRepository") val callSessionsRepository: ICallSessionsRepository
+) : ProxyService {
 
-    companion object {
-        private val MAX_EXECUTION_DELAY = 5L
+    override fun findCallSession(key: String): List<CallSession> {
+        logger.debug("Looking up session key {}", key)
+        var sessions: List<CallSession?> = mutableListOf()
+
+        val oSessionRedis: Optional<CallSessionRedis> = callSessionsRepository.findById(key)
+        if (oSessionRedis.isPresent) {
+            logger.debug("Found session for key {}", key)
+            sessions += oSessionRedis.get().callSession
+        }
+
+        return sessions.mapNotNull { it }
     }
 
-    override suspend fun send(sendMessageRequestDto: SendMessageRequestDto) {
-        logger.info { "Sending SMS to ${sendMessageRequestDto.destinationPhone} that ${sendMessageRequestDto.sourcePhone} is now available" }
+    override fun saveCallSession(saveCallSessionRequest: SaveCallSessionRequest) {
+        logger.debug("Saving session for key {}", saveCallSessionRequest.key)
+        callSessionsRepository.save(
+            CallSessionRedis(
+            saveCallSessionRequest.key,
+            saveCallSessionRequest.callSession,
+            saveCallSessionRequest.timeout
+        )
+        )
+        logger.debug("Saved session for key {}", saveCallSessionRequest.key)
+    }
 
-        val randomDelayLong = (1..MAX_EXECUTION_DELAY).shuffled().first().toLong()
-        delay(randomDelayLong.seconds)
-
-        logger.info { "Success sending SMS to ${sendMessageRequestDto.destinationPhone}, with delay ${randomDelayLong} seconds" }
+    override fun deleteCallSession(key: String) {
+        logger.debug("Deleting session for key {}", key)
+        callSessionsRepository.deleteById(key)
+        logger.debug("Deleted session for key {}", key)
     }
 
 }
