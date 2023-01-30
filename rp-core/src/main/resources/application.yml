@@ -14,7 +14,7 @@ logging:
 redis:
   # unique key prefix
   appPrefix: ${profileName}
-  hosts: [ ${RP_CORE_REDIS_HOSTS} ]
+  hosts: ${RP_CORE_REDIS_HOSTS}
   username: ${RP_CORE_REDIS_USERNAME}
   password: ${RP_CORE_REDIS_PASSWORD}
   minIdle: 1

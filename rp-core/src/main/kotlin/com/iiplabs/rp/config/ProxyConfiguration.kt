@@ -23,15 +23,11 @@ import org.springframework.data.redis.connection.RedisPassword
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory
-import org.springframework.transaction.annotation.EnableTransactionManagement
 import java.time.Duration
 import java.util.concurrent.RejectedExecutionException
 
-@EnableTransactionManagement
-@EnableRedisRepositories
 @Configuration
 class ProxyConfiguration {
 
@@ -115,18 +111,23 @@ class ProxyConfiguration {
         return template
     }
 
+    @Bean("redisConfigData")
+    fun redisConfigData() : RedisConfigData {
+        return RedisConfigData()
+    }
+
 }
 
 @ConfigurationProperties(prefix = "redis")
-data class RedisConfigData @ConstructorBinding constructor(
-    val hosts: List<String>,
-    val username: String?,
-    val password: String?,
-    val minIdle: Int,
-    val maxIdle: Int,
-    val maxTotal: Int,
-    val timeout: Long,
-    val ioThreadPoolSize: Int,
-    val computationThreadPoolSize: Int,
-    val maxPendingTasks: Int
+data class RedisConfigData (
+    val hosts: List<String> = listOf("localhost:6379"),
+    val username: String = "",
+    val password: String = "",
+    val minIdle: Int = 0,
+    val maxIdle: Int = 0,
+    val maxTotal: Int = 0,
+    val timeout: Long = 0,
+    val ioThreadPoolSize: Int = 1,
+    val computationThreadPoolSize: Int = 1,
+    val maxPendingTasks: Int = 0
 )

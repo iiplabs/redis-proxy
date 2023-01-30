@@ -7,8 +7,13 @@ import mu.KotlinLogging
 import org.springframework.stereotype.Service
 
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import ru.osp.collectors.csp.model.redis.CallSessionRedis
 import java.util.*
+
+const val CALL_SESSION_PREFIX = "call-session"
+
+private val logger = KotlinLogging.logger {}
 
 interface ProxyService {
     fun findCallSession(key: String): List<CallSession>
@@ -16,20 +21,23 @@ interface ProxyService {
     fun deleteCallSession(key: String)
 }
 
-private val logger = KotlinLogging.logger {}
-
 @Service("proxyService")
 class ProxyServiceImpl(
-    @Qualifier("callSessionsRepository") val callSessionsRepository: ICallSessionsRepository
+    @Qualifier("callSessionsRepository")
+    val callSessionsRepository: ICallSessionsRepository,
+    @Value("\${redis.appPrefix}")
+    val appPrefix: String
 ) : ProxyService {
 
     override fun findCallSession(key: String): List<CallSession> {
-        logger.debug("Looking up session key {}", key)
+        val translatedKey: String = getTranslatedKey(key)
+
+        logger.debug("Looking up session key {}", translatedKey)
         var sessions: List<CallSession?> = mutableListOf()
 
-        val oSessionRedis: Optional<CallSessionRedis> = callSessionsRepository.findById(key)
+        val oSessionRedis: Optional<CallSessionRedis> = callSessionsRepository.findById(translatedKey)
         if (oSessionRedis.isPresent) {
-            logger.debug("Found session for key {}", key)
+            logger.debug("Found session for key {}", translatedKey)
             sessions += oSessionRedis.get().callSession
         }
 
@@ -37,21 +45,29 @@ class ProxyServiceImpl(
     }
 
     override fun saveCallSession(saveCallSessionRequest: SaveCallSessionRequest) {
+        val translatedKey: String = getTranslatedKey(saveCallSessionRequest.key)
+
         logger.debug("Saving session for key {}", saveCallSessionRequest.key)
         callSessionsRepository.save(
             CallSessionRedis(
-            saveCallSessionRequest.key,
-            saveCallSessionRequest.callSession,
-            saveCallSessionRequest.timeout
+                translatedKey,
+                saveCallSessionRequest.callSession,
+                saveCallSessionRequest.timeout
+            )
         )
-        )
-        logger.debug("Saved session for key {}", saveCallSessionRequest.key)
+        logger.debug("Saved session for key {}", translatedKey)
     }
 
     override fun deleteCallSession(key: String) {
-        logger.debug("Deleting session for key {}", key)
-        callSessionsRepository.deleteById(key)
-        logger.debug("Deleted session for key {}", key)
+        val translatedKey: String = getTranslatedKey(key)
+
+        logger.debug("Deleting session for key {}", translatedKey)
+        callSessionsRepository.deleteById(translatedKey)
+        logger.debug("Deleted session for key {}", translatedKey)
+    }
+
+    private fun getTranslatedKey(key: String): String {
+        return "$appPrefix:$CALL_SESSION_PREFIX:$key"
     }
 
 }

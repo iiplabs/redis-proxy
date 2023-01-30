@@ -14,6 +14,7 @@ services:
       RP_CORE_REDIS_HOSTS: ${RP_CORE_REDIS_HOSTS}
       RP_CORE_REDIS_USERNAME: ${RP_CORE_REDIS_USERNAME}
       RP_CORE_REDIS_PASSWORD: ${RP_CORE_REDIS_PASSWORD}
+      profileName: ${profileName}
     depends_on:
       - redis
 
@@ -24,5 +25,5 @@ services:
       - REDIS_AOF_ENABLED=no
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
       - REDIS_IO_THREADS=4
-      - REDIS_IO_THREADS_DO_READS=true
-    command: /opt/bitnami/scripts/redis/run.sh --maxmemory 100mb
+      - REDIS_IO_THREADS_DO_READS=yes
+    command: /opt/bitnami/scripts/redis/run.sh --maxmemory 128mb
