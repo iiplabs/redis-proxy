@@ -20,6 +20,9 @@ services:
 
   redis:
     image: 'bitnami/redis:latest'
+    container_name: rp-redis
+    ports:
+      - '6379:6379'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_AOF_ENABLED=no

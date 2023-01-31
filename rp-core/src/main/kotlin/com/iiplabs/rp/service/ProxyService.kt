@@ -32,7 +32,7 @@ class ProxyServiceImpl(
     override fun findCallSession(key: String): List<CallSession> {
         val translatedKey: String = getTranslatedKey(key)
 
-        logger.debug("Looking up session key {}", translatedKey)
+        logger.info("Looking up session key {}", translatedKey)
         var sessions: List<CallSession?> = mutableListOf()
 
         val oSessionRedis: Optional<CallSessionRedis> = callSessionsRepository.findById(translatedKey)
