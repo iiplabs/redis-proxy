@@ -16,6 +16,12 @@ RP_CORE_SERVER_PORT=9091
 
 RP_CORE_REDIS_HOSTS=rp-redis:6379
 
+RP_CORE_REDIS_USERNAME=
+
+RP_CORE_REDIS_PASSWORD=
+
+profileName=rp
+
 ## Docker
 
 ### Start the system
