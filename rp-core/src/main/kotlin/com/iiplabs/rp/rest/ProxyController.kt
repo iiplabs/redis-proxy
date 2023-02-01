@@ -1,7 +1,6 @@
 package com.iiplabs.rp.rest
 
 import com.iiplabs.rp.legacy.CallSession
-import com.iiplabs.rp.model.SaveCallSessionRequest
 import jakarta.validation.Valid
 
 import com.iiplabs.rp.service.ProxyService
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import ru.osp.collectors.csp.model.redis.CallSessionRedis
 
 @RequestMapping("/api/v1")
 @RestController
@@ -32,7 +32,7 @@ class ProxyController(
     }
 
     @PostMapping("/save-call-session")
-    fun saveCallSession(@Valid @RequestBody saveCallSessionRequest: SaveCallSessionRequest) {
+    fun saveCallSession(@Valid @RequestBody saveCallSessionRequest: CallSessionRedis) {
         proxyService.saveCallSession(saveCallSessionRequest)
     }
 

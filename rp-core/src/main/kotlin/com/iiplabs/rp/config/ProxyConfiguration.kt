@@ -106,11 +106,12 @@ class ProxyConfiguration {
     fun redisTemplate(@Qualifier("redisConnectionFactory") redisConnectionFactory: RedisConnectionFactory): RedisTemplate<String, Any> {
         val template = RedisTemplate<String, Any>()
         template.setConnectionFactory(redisConnectionFactory)
-        // дефолтный сериализатор работает криво, поэтому тут задается явно
+
         template.keySerializer = JdkSerializationRedisSerializer()
         template.valueSerializer = JdkSerializationRedisSerializer()
         template.hashKeySerializer = JdkSerializationRedisSerializer()
         template.hashValueSerializer = JdkSerializationRedisSerializer()
+
         return template
     }
 
