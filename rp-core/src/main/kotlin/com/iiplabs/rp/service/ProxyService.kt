@@ -36,10 +36,10 @@ class ProxyServiceImpl(
         logger.info("Looking up session key {}", translatedKey)
         var sessions: List<CallSession?> = mutableListOf()
 
-        val oSessionRedis: Optional<CallSessionRedis> = callSessionsRepository.findByKey(translatedKey)
-        if (oSessionRedis.isPresent) {
+        val oSessionRedis = callSessionsRepository.findByKey(translatedKey)
+        if (oSessionRedis != null) {
             logger.debug("Found session for key {}", translatedKey)
-            sessions += oSessionRedis.get().callSession
+            sessions += oSessionRedis.callSession
         }
 
         return sessions.mapNotNull { it }
@@ -65,9 +65,9 @@ class ProxyServiceImpl(
         val translatedKey: String = getTranslatedKey(key)
 
         logger.debug("Deleting session for key {}", translatedKey)
-        val oSessionRedis: Optional<CallSessionRedis> = callSessionsRepository.findByKey(translatedKey)
-        if (oSessionRedis.isPresent) {
-            callSessionsRepository.deleteById(oSessionRedis.get().id!!)
+        val oSessionRedis = callSessionsRepository.findByKey(translatedKey)
+        if (oSessionRedis != null) {
+            callSessionsRepository.deleteById(oSessionRedis.id!!)
             logger.debug("Deleted session for key {}", translatedKey)
         } else {
             logger.error("call session for key {} not found", translatedKey)
