@@ -14,10 +14,10 @@ data class CallSessionRedis(
     @field:NotNull(message = "{validation.invalid_key}")
     @field:Size(min = 1, max = 100, message = "{validation.invalid_key}")
     @Indexed
-    var key: String,
+    var key: String?,
 
     @field:NotNull(message = "{validation.invalid_session}")
-    var callSession: CallSession,
+    var callSession: CallSession?,
 
     // minimum timeout 1
     @field:Min(1, message="{validation.invalid_timeout}")

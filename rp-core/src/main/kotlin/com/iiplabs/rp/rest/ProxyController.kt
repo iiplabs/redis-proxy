@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.osp.collectors.csp.model.redis.CallSessionRedis
+import java.net.URI
 
 @RequestMapping("/api/v1")
 @RestController
@@ -32,8 +33,10 @@ class ProxyController(
     }
 
     @PostMapping("/save-call-session")
-    fun saveCallSession(@Valid @RequestBody saveCallSessionRequest: CallSessionRedis) {
+    fun saveCallSession(@Valid @RequestBody saveCallSessionRequest: CallSessionRedis): ResponseEntity<String> {
         proxyService.saveCallSession(saveCallSessionRequest)
+        return ResponseEntity.created(URI.create("/api/v1/find-call-session?key=" + saveCallSessionRequest.key))
+            .build()
     }
 
     /**

@@ -47,7 +47,7 @@ class ProxyServiceImpl(
 
     @Transactional
     override fun saveCallSession(saveCallSessionRequest: CallSessionRedis) {
-        val translatedKey: String = getTranslatedKey(saveCallSessionRequest.key)
+        val translatedKey: String = getTranslatedKey(saveCallSessionRequest.key!!)
 
         logger.debug("Saving session for key {}", saveCallSessionRequest.key)
         callSessionsRepository.save(

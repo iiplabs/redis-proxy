@@ -37,18 +37,24 @@ let runner = async _ => {
   let responseDataAndTime = await getCallSessionByKey(key)
   console.log(responseDataAndTime)
 
-  await axios.post('http://localhost:9091/api/v1/save-call-session', newSession).catch(_ => { 
+  await axios.post('http://localhost:9091/api/v1/save-call-session', newSession).catch(e => { 
     console.log(`Problem saving call session with key: ${key}. Program terminated.`)
-    return
+    const { response } = e
+    const { data } = response
+    console.log(data)
+    process.exit(1)
   })
   console.log(`Saved call session with key: ${key}`)
 
   responseDataAndTime = await getCallSessionByKey(key)
   console.log(responseDataAndTime)
 
-  await axios.delete(`http://localhost:9091/api/v1/delete-call-session?key=${key}`).catch(_ => { 
+  await axios.delete(`http://localhost:9091/api/v1/delete-call-session?key=${key}`).catch(e => { 
     console.log(`Problem deleting call session with key: ${key}. Program terminated.`)
-    return
+    const { response } = e
+    const { data } = response
+    console.log(data)
+    process.exit(1)
   })
   console.log(`Deleted call session with key: ${key}`)
 

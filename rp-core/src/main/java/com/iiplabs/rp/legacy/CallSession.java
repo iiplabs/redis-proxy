@@ -11,6 +11,12 @@ public class CallSession {
         otherSystemId = 0;
     }
 
+    public CallSession(int callSessionId, int otherSystemId) {
+        this();
+        this.callSessionId = callSessionId;
+        this.otherSystemId = otherSystemId;
+    }
+
     public int getCallSessionId() {
         return callSessionId;
     }

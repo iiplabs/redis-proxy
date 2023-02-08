@@ -20,6 +20,7 @@
 		<commons.pool.version>2.11.1</commons.pool.version>
 		<logging.version>3.0.4</logging.version>
 		<mockk.version>4.0.0</mockk.version>
+		<embedded.redis.version>0.7.3</embedded.redis.version>
 	</properties>
 
 	<dependencies>
@@ -93,6 +94,12 @@
 		<dependency>
 			<groupId>io.projectreactor</groupId>
 			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>it.ozimov</groupId>
+			<artifactId>embedded-redis</artifactId>
+			<version>${embedded.redis.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

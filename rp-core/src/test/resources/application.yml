@@ -12,7 +12,7 @@ logging:
 redis:
   # unique key prefix
   appPrefix: csp
-  hosts: localhost:6379
+  hosts: 127.0.0.1
   username:
   password:
   minIdle: 1
