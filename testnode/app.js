@@ -6,9 +6,11 @@ let runner = async _ => {
   // random number between MIN / MAX
   const random = (min, max) => Math.floor(Math.random() * (max - min)) + min
 
-  const getCallSessionByKey = key => {
+  const getCallSessionByKey = (baseUrl, key) => {
     const start = Date.now()
-    return axios.get(`http://localhost:9091/api/v1/find-call-session?key=${key}`).then((response) => {
+    const url = `${baseUrl}/api/v1/find-call-session?key=${key}`
+    console.log(`quering URL ${url}`)
+    return axios.get(url).then((response) => {
       const { data: callSessionData } = response
       const finish = Date.now()
       const time = finish - start
@@ -21,6 +23,7 @@ let runner = async _ => {
     })
   }
 
+  const baseUrl = 'http://localhost:9091'
   const minRandom = 0
   const maxRandom = 100000
 
@@ -34,10 +37,10 @@ let runner = async _ => {
     timeout: 1
   }
 
-  let responseDataAndTime = await getCallSessionByKey(key)
+  let responseDataAndTime = await getCallSessionByKey(baseUrl, key)
   console.log(responseDataAndTime)
 
-  await axios.post('http://localhost:9091/api/v1/save-call-session', newSession).catch(e => { 
+  await axios.post(`${baseUrl}/api/v1/save-call-session`, newSession).catch(e => {
     console.log(`Problem saving call session with key: ${key}. Program terminated.`)
     const { response } = e
     const { data } = response
@@ -46,10 +49,10 @@ let runner = async _ => {
   })
   console.log(`Saved call session with key: ${key}`)
 
-  responseDataAndTime = await getCallSessionByKey(key)
+  responseDataAndTime = await getCallSessionByKey(baseUrl, key)
   console.log(responseDataAndTime)
 
-  await axios.delete(`http://localhost:9091/api/v1/delete-call-session?key=${key}`).catch(e => { 
+  await axios.delete(`${baseUrl}/api/v1/delete-call-session?key=${key}`).catch(e => {
     console.log(`Problem deleting call session with key: ${key}. Program terminated.`)
     const { response } = e
     const { data } = response
@@ -58,7 +61,7 @@ let runner = async _ => {
   })
   console.log(`Deleted call session with key: ${key}`)
 
-  responseDataAndTime = await getCallSessionByKey(key)
+  responseDataAndTime = await getCallSessionByKey(baseUrl, key)
   console.log(responseDataAndTime)
 }
 
